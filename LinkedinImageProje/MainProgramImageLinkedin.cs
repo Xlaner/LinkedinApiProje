@@ -25,7 +25,7 @@ namespace LinkedinImageProje
             { 
                 accessToken = "Your Accsess Token",//Your accsess Token
                 
-                fileUploadPath = @"C:\Users\berke\Desktop\APIProje\Linkedin_proje\LinkedinProje\LinkedinImageProje\Photos\indir.png", //path of the photo
+                fileUploadPath = @"ExampleImagePath", //path of the photo
                 imageText = "ExampleText", //Content Text
 
 
