@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkedinImageProje", "LinkedinImageProje\LinkedinImageProje.csproj", "{03647FE1-7378-4FDC-96F5-60F02EB369ED}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageAndText", "ImageAndText", "{33CF27DA-ABB9-4B3A-BA58-2C001F2AE170}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OnlyText", "OnlyText", "{B856EB9F-6425-4D07-A586-0B7A0E8EE952}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkedinTextProje", "ConsoleApp1\LinkedinTextProje.csproj", "{39A7842C-97A5-417C-AD0B-4F0D88BCC6B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkedinImageProje", "LinkedinImageProject\LinkedinImageProje.csproj", "{03647FE1-7378-4FDC-96F5-60F02EB369ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkedinTextProje", "LinkedinOnlyTextProject\LinkedinTextProje.csproj", "{39A7842C-97A5-417C-AD0B-4F0D88BCC6B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
