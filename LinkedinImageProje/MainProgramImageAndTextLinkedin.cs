@@ -23,10 +23,10 @@ namespace LinkedinImageProje
         {
             LinkedinURL URLS = new LinkedinURL 
             { 
-                accessToken = "Your Accsess Token",//Your accsess Token
+                accessToken = "AccessToken",//Your accsess Token
                 
-                fileUploadPath = @"ExampleImagePath", //path of the photo
-                imageText = "ExampleText", //Content Text
+                fileUploadPath = @"/ExapmlePath/Photo.png", //path of the photo
+                imageText = "", //Content Text
 
 
                 contentType = "application/json",
@@ -34,18 +34,26 @@ namespace LinkedinImageProje
                 imageText2 = "ExampleText",
                 imageTitle = "Title",
             };
-            
 
-            using (var client = new HttpClient())
+            using (var profile = new HttpClient())
             {
-                LinkedinPostRegisterLinkedin request = new LinkedinPostRegisterLinkedin
+                profile.DefaultRequestHeaders.Add("Authorization", "Bearer " + URLS.accessToken);
+                var responseProfile = profile.GetAsync("https://api.linkedin.com/v2/me").Result;
+
+                var respContentProfile = responseProfile.Content.ReadAsStringAsync().Result;
+
+                JToken tokenProfile = JObject.Parse(respContentProfile);
+                string profileId = (string)tokenProfile["id"];
+                using (var client = new HttpClient())
                 {
-                    registerUploadRequest = new Registeruploadrequest
+                    LinkedinPostRegisterLinkedin request = new LinkedinPostRegisterLinkedin
                     {
-                        recipes = new[] { "urn:li:digitalmediaRecipe:feedshare-image" },
-                        owner = "urn:li:person:T6hBlHuGR-",
-                        serviceRelationships = new[]
+                        registerUploadRequest = new Registeruploadrequest
                         {
+                            recipes = new[] { "urn:li:digitalmediaRecipe:feedshare-image" },
+                            owner = "urn:li:person:"+profileId,
+                            serviceRelationships = new[]
+                            {
                             new Servicerelationship
                             {
                                 relationshipType = "OWNER",
@@ -53,48 +61,48 @@ namespace LinkedinImageProje
 
                             }
                         }
-                    }
+                        }
 
 
-                };
-                var reqString = JsonConvert.SerializeObject(request);
-                StringContent content = new StringContent(reqString, Encoding.UTF8, URLS.contentType);
-                //-------------------------------------------------------------------------------------------------------------------------------
+                    };
+                    var reqString = JsonConvert.SerializeObject(request);
+                    StringContent content = new StringContent(reqString, Encoding.UTF8, URLS.contentType);
+                    //-------------------------------------------------------------------------------------------------------------------------------
 
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + URLS.accessToken);
-                //-------------------------------------------------------------------------------------------------------------------------------
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + URLS.accessToken);
+                    //-------------------------------------------------------------------------------------------------------------------------------
 
 
 
-                var response = client.PostAsync("https://api.linkedin.com/v2/assets?action=registerUpload", content).Result;
+                    var response = client.PostAsync("https://api.linkedin.com/v2/assets?action=registerUpload", content).Result;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var respContent = response.Content.ReadAsStringAsync().Result;
-                   
-
-                    JToken token = JObject.Parse(respContent);
-                    string uploadUrl = (string)token["value"]["uploadMechanism"]["com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"]["uploadUrl"];
-
-                    string asset = (string)token["value"]["asset"];
-                    //Console.WriteLine(asset);
-
-                    await UploadImage(URLS.fileUploadPath, uploadUrl, URLS.accessToken);
-
-                    using(var clientShare = new HttpClient())
+                    if (response.IsSuccessStatusCode)
                     {
-                        LinkedinPostImageShareRequest requestShare = new LinkedinPostImageShareRequest
+                        var respContent = response.Content.ReadAsStringAsync().Result;
+
+
+                        JToken token = JObject.Parse(respContent);
+                        string uploadUrl = (string)token["value"]["uploadMechanism"]["com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"]["uploadUrl"];
+
+                        string asset = (string)token["value"]["asset"];
+                        //Console.WriteLine(asset);
+
+                        await UploadImage(URLS.fileUploadPath, uploadUrl, URLS.accessToken);
+
+                        using (var clientShare = new HttpClient())
                         {
-                            author = "urn:li:person:T6hBlHuGR-",
-                            lifecycleState = "PUBLISHED",
-                            specificContent = new Specificcontent
+                            LinkedinPostImageShareRequest requestShare = new LinkedinPostImageShareRequest
                             {
-                                comlinkedinugcShareContent = new ComLinkedinUgcSharecontent
+                                author = "urn:li:person:T6hBlHuGR-",
+                                lifecycleState = "PUBLISHED",
+                                specificContent = new Specificcontent
                                 {
-                                    shareCommentary = new Sharecommentary { text = URLS.imageText},
-                                    shareMediaCategory = "IMAGE",
-                                    media = new Medium[]
+                                    comlinkedinugcShareContent = new ComLinkedinUgcSharecontent
                                     {
+                                        shareCommentary = new Sharecommentary { text = URLS.imageText },
+                                        shareMediaCategory = "IMAGE",
+                                        media = new Medium[]
+                                        {
                                         new Medium
                                         {
                                             status = "READY",
@@ -104,40 +112,41 @@ namespace LinkedinImageProje
                                             },
                                             media = asset,
                                             title = new Title { text = URLS.imageTitle},
-                                            
+
                                         }
+                                        }
+
                                     }
-                                    
+
+                                },
+
+                                visibility = new Visibility
+                                {
+                                    comlinkedinugcMemberNetworkVisibility = "PUBLIC"
                                 }
-                                    
-                            },
 
-                            visibility = new Visibility
+
+                            };
+
+                            var reqShareString = JsonConvert.SerializeObject(requestShare);
+                            StringContent contentShare = new StringContent(reqShareString, Encoding.UTF8, URLS.contentType);
+                            clientShare.DefaultRequestHeaders.Add("Authorization", "Bearer " + URLS.accessToken);
+                            var responseShare = client.PostAsync("https://api.linkedin.com/v2/ugcPosts", contentShare).Result;
+                            if (responseShare.IsSuccessStatusCode)
                             {
-                                comlinkedinugcMemberNetworkVisibility = "PUBLIC"
+                                Console.WriteLine("successed");
                             }
-
-
-                        };
-
-                        var reqShareString = JsonConvert.SerializeObject(requestShare);
-                        StringContent contentShare = new StringContent(reqShareString, Encoding.UTF8, URLS.contentType);
-                        clientShare.DefaultRequestHeaders.Add("Authorization", "Bearer " + URLS.accessToken);
-                        var responseShare = client.PostAsync("https://api.linkedin.com/v2/ugcPosts", contentShare).Result;
-                        if (responseShare.IsSuccessStatusCode)
-                        {
-                            Console.WriteLine("successed");
+                            else
+                            {
+                                Console.WriteLine(responseShare.StatusCode);
+                            }
                         }
-                        else
-                        {
-                            Console.WriteLine(responseShare.StatusCode);
-                        }
+
                     }
-
-                }
-                else
-                {
-                    Console.WriteLine(response.StatusCode);
+                    else
+                    {
+                        Console.WriteLine(response.StatusCode);
+                    }
                 }
             }
         }

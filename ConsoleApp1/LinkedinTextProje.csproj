@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{03647FE1-7378-4FDC-96F5-60F02EB369ED}</ProjectGuid>
+    <ProjectGuid>{39A7842C-97A5-417C-AD0B-4F0D88BCC6B3}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>LinkedinImageProje</RootNamespace>
-    <AssemblyName>LinkedinImageProje</AssemblyName>
+    <RootNamespace>ConsoleApp1</RootNamespace>
+    <AssemblyName>ConsoleApp1</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,19 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LinkedinPostImageShareRequest.cs" />
-    <Compile Include="LinkedinPostRegisterRequest.cs" />
+    <Compile Include="Body.cs" />
     <Compile Include="LinkedinURL.cs" />
-    <Compile Include="MainProgramImageAndTextLinkedin.cs" />
+    <Compile Include="MainProgramOnlyTextLinkedin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="Photos\1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
