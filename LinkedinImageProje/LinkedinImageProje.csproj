@@ -49,7 +49,7 @@
     <Compile Include="LinkedinPostImageShareRequest.cs" />
     <Compile Include="LinkedinPostRegisterRequest.cs" />
     <Compile Include="LinkedinURL.cs" />
-    <Compile Include="MainProgramImageLinkedin.cs" />
+    <Compile Include="MainProgramImageAndTextLinkedin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
